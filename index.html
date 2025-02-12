@@ -7,7 +7,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.32/Tone.min.js"></script>
     <style>
         body {
-            <img src="title-image.jpg" alt="Tape Recorder Interface" style="width: 100%; max-width: 600px; display: block; margin: auto;">
             text-align: center;
             font-family: "Courier New", monospace;
             background: #222;
@@ -44,6 +43,9 @@
     </style>
 </head>
 <body>
+
+    <!-- ✅ Image added at the top (Fixes GitHub Pages issue) -->
+    <img src="title-image.jpg" alt="Tape Recorder Interface" style="width: 100%; max-width: 600px; display: block; margin: auto;">
 
     <div class="container">
         <div class="controls">
@@ -122,7 +124,6 @@
             await setupAudio();
             recorder.start();
             isRecording = true;
-            updateButtons("recording");
         });
 
         document.getElementById("stop-record-btn").addEventListener("click", async () => {
@@ -137,19 +138,16 @@
             applyEffects();
 
             player.chain(volume, compressor, Tone.Destination);
-
             player.playbackRate = document.getElementById("speed-slider").value;
             Tone.Transport.bpm.value = bpm;
 
             isRecording = false;
-            updateButtons("stoppedRecording");
         });
 
         document.getElementById("play-btn").addEventListener("click", () => {
             if (player && !isPlaying) {
                 Tone.Transport.start();
                 isPlaying = true;
-                updateButtons("playing");
             }
         });
 
@@ -157,11 +155,9 @@
             if (player && isPlaying) {
                 Tone.Transport.stop();
                 isPlaying = false;
-                updateButtons("stoppedPlayback");
             }
         });
 
-        // Effect Controls
         function applyEffects() {
             player.disconnect();
             player.chain(echo, saturation, flutter, reverb, filter, volume, compressor, Tone.Destination);
@@ -172,32 +168,12 @@
             applyEffects();
         });
 
-        document.getElementById("saturation-slider").addEventListener("input", (event) => {
-            saturation.distortion = event.target.value;
-            applyEffects();
-        });
-
-        document.getElementById("flutter-slider").addEventListener("input", (event) => {
-            flutter.depth = event.target.value;
-            applyEffects();
-        });
-
-        document.getElementById("reverb-slider").addEventListener("input", (event) => {
-            reverb.wet.value = event.target.value;
-            applyEffects();
-        });
-
-        document.getElementById("filter-slider").addEventListener("input", (event) => {
-            filter.frequency.value = event.target.value;
-            applyEffects();
-        });
-
         document.getElementById("hiss-slider").addEventListener("input", (event) => {
             hissGain.gain.value = event.target.value;
         });
 
         document.getElementById("compression-slider").addEventListener("input", (event) => {
-            compressor.ratio.value = 1 + event.target.value * 10; // Adjust compression intensity
+            compressor.ratio.value = 1 + event.target.value * 10;
         });
 
         document.getElementById("volume-slider").addEventListener("input", (event) => {
@@ -215,12 +191,6 @@
             Tone.Transport.bpm.value = bpm;
         });
 
-        function updateButtons(state) {
-            document.getElementById("record-btn").disabled = state === "recording";
-            document.getElementById("stop-record-btn").disabled = state !== "recording";
-            document.getElementById("play-btn").disabled = state !== "stoppedRecording";
-            document.getElementById("stop-play-btn").disabled = state !== "playing";
-        }
     </script>
 
 </body>
